@@ -19,6 +19,16 @@ from app.contracts_v1 import (
     VectorUpsertRequestV1,
     VectorUpsertResponseV1,
 )
+from app.document.contracts import (
+    DocumentRegisterWorkflowRequestV1,
+    DocumentRegisterWorkflowResponseV1,
+    DocumentVerifyWorkflowRequestV1,
+    DocumentVerifyWorkflowResponseV1,
+)
+from app.document.workflow_service import (
+    run_document_register_workflow_v1,
+    run_document_verify_workflow_v1,
+)
 from app.guard_service import run_guard_v1
 from app.persist_service import archive_image_v1, upsert_vector_embedding_v1
 from app.register_workflow_service import run_register_workflow_v1
@@ -67,6 +77,26 @@ def vector_upsert(req: VectorUpsertRequestV1):
 def register_workflow(req: RegisterWorkflowRequestV1):
     try:
         return run_register_workflow_v1(req)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
+@app.post("/v1/workflow/document/register", response_model=DocumentRegisterWorkflowResponseV1)
+def document_register_workflow(req: DocumentRegisterWorkflowRequestV1):
+    try:
+        return run_document_register_workflow_v1(req)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
+@app.post("/v1/workflow/document/verify", response_model=DocumentVerifyWorkflowResponseV1)
+def document_verify_workflow(req: DocumentVerifyWorkflowRequestV1):
+    try:
+        return run_document_verify_workflow_v1(req)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:

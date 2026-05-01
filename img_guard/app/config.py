@@ -186,6 +186,37 @@ WAM_CHECKPOINT_PATH = Path(
 WM_TMP_DIR = Path(_env("WM_TMP_DIR", str(TMP_DIR / "watermark")))
 WM_OUTPUT_DIR = Path(_env("WM_OUTPUT_DIR", str(DATA_DIR / "wm_outputs")))
 
+# ── Document Module 
+
+# CLOVA OCR
+CLOVA_OCR_INVOKE_URL = _env("CLOVA_OCR_INVOKE_URL", "")
+CLOVA_OCR_SECRET = _env("CLOVA_OCR_SECRET", "")
+
+# Document embedding model (BAAI/bge-m3, 1024-dim)
+DOC_EMBED_MODEL = _env("DOC_EMBED_MODEL", "BAAI/bge-m3")
+DOC_VECTOR_TABLE = _env("DOC_VECTOR_TABLE", "document_embeddings_bge_m3")
+
+# Document policy threshold
+# cos < DOC_COS_ALLOW  → 다른 양식 → ALLOW (바로 등록)
+# cos >= DOC_COS_ALLOW → 같은 양식 존재 → OCR 핵심필드 비교 진입
+DOC_COS_ALLOW = _to_float("DOC_COS_ALLOW", 0.75)
+
+# Document S3 prefixes
+S3_PREFIX_DOC_REGISTER_REQUEST = _env("S3_PREFIX_DOC_REGISTER_REQUEST", "document/register_request")
+S3_PREFIX_DOC_RESULT = _env("S3_PREFIX_DOC_RESULT", "document/result")
+S3_PREFIX_DOC_VERIFY_REQUEST = _env("S3_PREFIX_DOC_VERIFY_REQUEST", "document/verify_request")
+S3_PREFIX_DOC_REJECTED = _env("S3_PREFIX_DOC_REJECTED", "document/rejected")
+S3_PREFIX_DOC_WATERMARK_RESULT = _env("S3_PREFIX_DOC_WATERMARK_RESULT", "document/watermarked")
+S3_PREFIX_DOC_PREVIEW = _env("S3_PREFIX_DOC_PREVIEW", "document/preview")
+S3_PREFIX_DOC_OCR_RAW = _env("S3_PREFIX_DOC_OCR_RAW", "document/ocr_raw")
+
+# Document tmp dir
+DOC_TMP_DIR = Path(_env("DOC_TMP_DIR", str(TMP_DIR / "document")))
+DOC_RENDER_DPI = _to_int("DOC_RENDER_DPI", 220)
+DOC_MAX_PAGES = _to_int("DOC_MAX_PAGES", 5)
+DOC_DEFAULT_TYPE = _env("DOC_DEFAULT_TYPE", "labor_contract_std_v1")
+DOC_OCR_TIMEOUT_SEC = _to_float("DOC_OCR_TIMEOUT_SEC", 30.0)
+
 
 def runtime_signature() -> str:
     """

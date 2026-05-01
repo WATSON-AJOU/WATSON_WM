@@ -179,7 +179,7 @@ class RegisterWorkflowOptionsV1(BaseModel):
     archive_wm_request_original: bool = True
     archive_wm_result: bool = True
     upsert_vector_on_allow: bool = True
-    require_token_issued_for_upsert: bool = True
+    require_token_issued_for_upsert: bool = False
     token_issued_meta_key: str = "token_issued"
 
 
